@@ -1,0 +1,8 @@
+[package]
+name = "dektop_app_rust_proj"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies.druid]
+version = "0.8.3"
+features = ["image"]
