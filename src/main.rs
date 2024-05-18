@@ -24,7 +24,7 @@ fn ui_builder() -> impl Widget<u32> {
     let title = Label::new("aloha");
     let til2 = Label::new("text");
 
-    let path = PathBuf::from("/Users/bbergman/Desktop/fuckass dog.png");
+    let path = PathBuf::from("images/fuckass dog.png");
     println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
     println!("{:?}", pic);
