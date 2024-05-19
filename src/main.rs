@@ -1,9 +1,10 @@
 use std::path::PathBuf;
-
 use druid::piet::InterpolationMode;
 use druid::widget::{Button, FillStrat, Flex, Image, Label};
 use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
+
+mod get_image;
 
 fn main() -> Result<(), PlatformError> {
     let main_window = WindowDesc::new(ui_builder()).title("Hallo");
@@ -27,7 +28,7 @@ fn ui_builder() -> impl Widget<u32> {
     let path = PathBuf::from("images/fuckass dog.png");
     println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
-    println!("{:?}", pic);
+    println!("{:?}", pic.as_ref().unwrap_err().to_string());
     let img = Image::new(match pic {
         Ok(image) => image,
         Err(_) => ImageBuf::empty(),
