@@ -1,8 +1,8 @@
-use std::path::PathBuf;
 use druid::piet::InterpolationMode;
 use druid::widget::{Button, FillStrat, Flex, Image, Label};
 use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
+use std::path::PathBuf;
 
 mod get_image;
 
@@ -18,30 +18,23 @@ fn ui_builder() -> impl Widget<u32> {
     // The label text will be computed dynamically based on the current locale and count
     let text =
         LocalizedString::new("hello-counter").with_arg("count", |data: &u32, _env| (*data).into());
-    let label = Label::new(text).padding(5.0).center();
-    let button = Button::new("increment")
+    let ibutton = Button::new("increment")
         .on_click(|_ctx, data, _env| *data += 1)
         .padding(5.0);
-    let title = Label::new("aloha");
-    let til2 = Label::new("text");
-
     let path = PathBuf::from("images/fuckass dog.png");
     println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
-    println!("{:?}", pic.as_ref().unwrap_err().to_string());
     let img = Image::new(match pic {
         Ok(image) => image,
         Err(_) => ImageBuf::empty(),
     })
-    .fill_mode(FillStrat::Fill)
+    .fill_mode(FillStrat::Contain)
     .interpolation_mode(InterpolationMode::Bilinear);
 
     return Flex::column()
-        .with_child(label)
-        .with_child(button)
-        .with_child(title)
-        .with_spacer(23.5)
-        .with_child(til2)
+        .with_child(Label::new("welcome to my program").padding(5.0).center())
+        .with_child(Label::new(text))
+        .with_child(ibutton)
         .with_child(img);
 }
 
