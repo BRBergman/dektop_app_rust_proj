@@ -24,18 +24,20 @@ fn ui_builder() -> impl Widget<u32> {
     let path = PathBuf::from("images/fuckass dog.png");
     println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
-    let img = Image::new(match pic {
+    let fuckassdog = Image::new(match pic {
         Ok(image) => image,
         Err(_) => ImageBuf::empty(),
     })
-    .fill_mode(FillStrat::Contain)
+    .fill_mode(FillStrat::ScaleDown)
     .interpolation_mode(InterpolationMode::Bilinear);
 
     return Flex::column()
-        .with_child(Label::new("welcome to my program").padding(5.0).center())
+        .with_child(Label::new("welcome to my program"))
         .with_child(Label::new(text))
         .with_child(ibutton)
-        .with_child(img);
+        .with_child(fuckassdog)
+        .scroll()
+        .disable_scrollbars()
+        .center()
+        .padding(5.0);
 }
-
-//uh oh this is good!
