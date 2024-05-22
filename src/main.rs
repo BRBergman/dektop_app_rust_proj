@@ -7,7 +7,10 @@ use std::path::PathBuf;
 mod get_image;
 
 fn main() -> Result<(), PlatformError> {
-    let main_window = WindowDesc::new(ui_builder()).title("Hallo");
+    let main_window = WindowDesc::new(ui_builder())
+        .title("Hallo")
+        .window_size((1280.0,720.0))
+        .with_min_size((854.0,480.0));
     let data = 0_u32;
     AppLauncher::with_window(main_window)
         .log_to_console()
@@ -21,7 +24,7 @@ fn ui_builder() -> impl Widget<u32> {
     let ibutton = Button::new("increment")
         .on_click(|_ctx, data, _env| *data += 1)
         .padding(5.0);
-    let path = PathBuf::from("images/fuckass dog.png");
+    let path = PathBuf::from("images/fuckass_dog.png");
     println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
     let fuckassdog = Image::new(match pic {
@@ -31,7 +34,7 @@ fn ui_builder() -> impl Widget<u32> {
     .fill_mode(FillStrat::ScaleDown)
     .interpolation_mode(InterpolationMode::Bilinear);
 
-    return Flex::column()
+    Flex::column()
         .with_child(Label::new("welcome to my program"))
         .with_child(Label::new(text))
         .with_child(ibutton)
@@ -39,5 +42,5 @@ fn ui_builder() -> impl Widget<u32> {
         .scroll()
         .disable_scrollbars()
         .center()
-        .padding(5.0);
+        .padding(5.0)
 }
