@@ -1,8 +1,11 @@
 use druid::piet::InterpolationMode;
 use druid::widget::{BackgroundBrush, Button, FillStrat, Flex, Image, Label};
-use druid::{AppLauncher, Color, LocalizedString, PlatformError, Widget, WindowDesc};
+use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
 use std::path::PathBuf;
+
+mod colors;
+use colors::Theme;
 
 fn main() -> Result<(), PlatformError> {
     let main_window = WindowDesc::new(ui_builder())
@@ -16,6 +19,7 @@ fn main() -> Result<(), PlatformError> {
 }
 
 fn ui_builder() -> impl Widget<u32> {
+    let colorscheme = Theme::ROSE_PINE_MOON;
     // The label text will be computed dynamically based on the current locale and count
     let text =
         LocalizedString::new("hello-counter").with_arg("count", |data: &u32, _env| (*data).into());
@@ -30,13 +34,7 @@ fn ui_builder() -> impl Widget<u32> {
     })
     .fill_mode(FillStrat::ScaleDown)
     .interpolation_mode(InterpolationMode::Bilinear)
-    .border(
-        match Color::from_hex_str("#393552") {
-            Ok(color) => color,
-            Err(_) => Color::BLACK,
-        },
-        3.0,
-    )
+    .border(colorscheme.overlay, 3.0)
     .rounded(2.0);
 
     Flex::column()
@@ -48,10 +46,5 @@ fn ui_builder() -> impl Widget<u32> {
         .disable_scrollbars()
         .center()
         .padding(5.0)
-        .background(BackgroundBrush::Color(
-            match Color::from_hex_str("#232136") {
-                Ok(color) => color,
-                Err(_) => Color::grey(1.0),
-            },
-        ))
+        .background(BackgroundBrush::Color(colorscheme.base))
 }
