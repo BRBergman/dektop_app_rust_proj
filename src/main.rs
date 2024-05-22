@@ -1,16 +1,14 @@
 use druid::piet::InterpolationMode;
-use druid::widget::{Button, FillStrat, Flex, Image, Label};
-use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
+use druid::widget::{BackgroundBrush, Button, FillStrat, Flex, Image, Label};
+use druid::{AppLauncher, Color, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
 use std::path::PathBuf;
-
-mod get_image;
 
 fn main() -> Result<(), PlatformError> {
     let main_window = WindowDesc::new(ui_builder())
         .title("Hallo")
-        .window_size((1280.0,720.0))
-        .with_min_size((854.0,480.0));
+        .window_size((1280.0, 720.0))
+        .with_min_size((854.0, 480.0));
     let data = 0_u32;
     AppLauncher::with_window(main_window)
         .log_to_console()
@@ -25,14 +23,21 @@ fn ui_builder() -> impl Widget<u32> {
         .on_click(|_ctx, data, _env| *data += 1)
         .padding(5.0);
     let path = PathBuf::from("images/fuckass_dog.png");
-    println!("is it there?????? {}", path.exists());
     let pic = ImageBuf::from_file(path);
     let fuckassdog = Image::new(match pic {
         Ok(image) => image,
         Err(_) => ImageBuf::empty(),
     })
     .fill_mode(FillStrat::ScaleDown)
-    .interpolation_mode(InterpolationMode::Bilinear);
+    .interpolation_mode(InterpolationMode::Bilinear)
+    .border(
+        match Color::from_hex_str("#393552") {
+            Ok(color) => color,
+            Err(_) => Color::BLACK,
+        },
+        3.0,
+    )
+    .rounded(2.0);
 
     Flex::column()
         .with_child(Label::new("welcome to my program"))
@@ -43,4 +48,10 @@ fn ui_builder() -> impl Widget<u32> {
         .disable_scrollbars()
         .center()
         .padding(5.0)
+        .background(BackgroundBrush::Color(
+            match Color::from_hex_str("#232136") {
+                Ok(color) => color,
+                Err(_) => Color::grey(1.0),
+            },
+        ))
 }
