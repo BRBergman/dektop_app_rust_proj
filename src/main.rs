@@ -1,8 +1,7 @@
 use druid::piet::InterpolationMode;
-use druid::widget::{BackgroundBrush, Button, FillStrat, Flex, Image, Label};
+use druid::widget::{Align, Button, FillStrat, Flex, Image, Label};
 use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
-use std::path::PathBuf;
 
 mod colors;
 use colors::Theme;
@@ -26,9 +25,7 @@ fn ui_builder() -> impl Widget<u32> {
     let ibutton = Button::new("increment")
         .on_click(|_ctx, data, _env| *data += 1)
         .padding(5.0);
-    let path = PathBuf::from("images/fuckass_dog.png");
-    let pic = ImageBuf::from_file(path);
-    let fuckassdog = Image::new(match pic {
+    let fuckassdog = Image::new(match ImageBuf::from_file("images/fuckass_dog.png") {
         Ok(image) => image,
         Err(_) => ImageBuf::empty(),
     })
@@ -36,15 +33,15 @@ fn ui_builder() -> impl Widget<u32> {
     .interpolation_mode(InterpolationMode::Bilinear)
     .border(colorscheme.overlay, 3.0)
     .rounded(2.0);
-
-    Flex::column()
-        .with_child(Label::new("welcome to my program"))
-        .with_child(Label::new(text))
+    let layout = Flex::column()
+        .with_child(Label::new("welcome to my program").with_text_color(colorscheme.text))
+        .with_child(Label::new(text).with_text_color(colorscheme.text))
         .with_child(ibutton)
         .with_child(fuckassdog)
         .scroll()
         .disable_scrollbars()
         .center()
         .padding(5.0)
-        .background(BackgroundBrush::Color(colorscheme.base))
+        .background(colorscheme.base);
+    Align::centered(layout)
 }
