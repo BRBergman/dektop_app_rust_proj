@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 //https://rosepinetheme.com/palette/ingredients/
-use druid::Color;
-#[derive(Copy, Clone,PartialEq)]
+use druid::{Color, Data};
+#[derive(Copy, Clone,PartialEq,Data)]
 pub struct Theme {
     pub base: Color,
     pub surface: Color,
@@ -33,28 +33,29 @@ impl Theme {
         overlay: Color::rgb8(242, 233, 222),
         muted: Color::rgb8(152, 147, 165),
         subtle: Color::rgb8(121, 117, 147),
-        text:   Color::rgb8(87, 82, 121),
+        text: Color::rgb8(87, 82, 121),
     };
     pub fn getthemes() -> Vec<Theme>
     {
-        return vec![self::Theme::ROSE_PINE,self::Theme::ROSE_PINE_MOON,self::Theme::ROSE_PINE_DAWN]
+        return vec![self::Theme::ROSE_PINE, self::Theme::ROSE_PINE_MOON, self::Theme::ROSE_PINE_DAWN]
     }
-    pub fn next_theme(&mut self)-> Self
+    pub fn next_theme(&mut self) -> Self
     {
         let themes = Theme::getthemes();
-        if *self == themes[themes.len()-1]
+        if *self == themes[themes.len() - 1]
         {
-            *self= themes[0];
-            return *self;
+            *self = themes[0];
+        } else {
+            let mut i = 0;
+            while themes[i] != *self {
+                i += 1;
+            }
+            *self = themes[i + 1];
         }
-        let mut i = 0;
-        while themes[i] != *self {
-            i+=1;
-        }
-       *self= themes[i+1];
-
         return *self;
     }
+
+
     fn set_theme(theme: Theme) -> Self
     {
         return theme;

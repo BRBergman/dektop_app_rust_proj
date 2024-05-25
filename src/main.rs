@@ -1,6 +1,6 @@
 use druid::piet::InterpolationMode;
 use druid::widget::{Align, Button, FillStrat, Flex, Image, Label};
-use druid::{AppLauncher, LocalizedString, PlatformError, Widget, WindowDesc};
+use druid::{ AppLauncher, Data, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
 
 mod colors;
@@ -25,26 +25,37 @@ fn ui_builder() -> impl Widget<u32> {
     // The label text will be computed dynamically based on the current locale and count
     let text =
         LocalizedString::new("hello-counter").with_arg("count", |data: &u32, _env| (*data).into());
-    let ibutton = Button::new("increment")
+    let button = Button::new("increment")
         .on_click(|_ctx, data, _env| *data += 1)
         .padding(5.0);
-    let fuckassdog = Image::new(match ImageBuf::from_file("images/fuckass_dog.png") {
-        Ok(image) => image,
-        Err(_) => ImageBuf::empty(),
-    })
+    let fuckassdog = Image::new(ImageBuf::from_file("images/fuckass_dog.png").unwrap_or_else(|_| ImageBuf::empty()))
     .fill_mode(FillStrat::ScaleDown)
     .interpolation_mode(InterpolationMode::Bilinear)
     .border(colorscheme.overlay, 3.0)
     .rounded(2.0);
+
+
+    let theme_button = Button::new("bwaaa".to_string()).on_click(|ctx, _data, _env| {
+      
+
+    });
+
+
     let layout = Flex::column()
         .with_child(Label::new("welcome to my program").with_text_color(colorscheme.text))
         .with_child(Label::new(text).with_text_color(colorscheme.text))
-        .with_child(ibutton)
+        .with_child(button)
         .with_child(fuckassdog)
+        .with_child(theme_button)
         .scroll()
         .disable_scrollbars()
         .center()
         .padding(5.0)
         .background(colorscheme.base);
     Align::centered(layout)
+}
+
+fn test()
+{
+    println!("test");
 }
