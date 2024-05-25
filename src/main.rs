@@ -2,7 +2,6 @@ use druid::piet::InterpolationMode;
 use druid::widget::{Align, Button, FillStrat, Flex, Image, Label};
 use druid::{ AppLauncher, Data, LocalizedString, PlatformError, Widget, WindowDesc};
 use druid::{ImageBuf, WidgetExt};
-
 mod colors;
 use colors::Theme;
 
@@ -18,9 +17,10 @@ fn main() -> Result<(), PlatformError> {
 }
 
 fn ui_builder() -> impl Widget<u32> {
-    let mut colorscheme = Theme::ROSE_PINE_MOON;
-    colorscheme.next_theme();
-    
+    let colorscheme = Theme::set_theme(Theme::ROSE_PINE_MOON);
+    let theme_button = Button::new("bwaaa".to_string()).on_click(|ctx, _, _env| {
+        ctx.request_update();
+    });
     //colorscheme.next_theme();
     // The label text will be computed dynamically based on the current locale and count
     let text =
@@ -31,19 +31,16 @@ fn ui_builder() -> impl Widget<u32> {
     let fuckassdog = Image::new(ImageBuf::from_file("images/fuckass_dog.png").unwrap_or_else(|_| ImageBuf::empty()))
     .fill_mode(FillStrat::ScaleDown)
     .interpolation_mode(InterpolationMode::Bilinear)
-    .border(colorscheme.overlay, 3.0)
+    .border(colorscheme[0].overlay, 3.0)
     .rounded(2.0);
 
 
-    let theme_button = Button::new("bwaaa".to_string()).on_click(|ctx, _data, _env| {
-      
 
-    });
 
 
     let layout = Flex::column()
-        .with_child(Label::new("welcome to my program").with_text_color(colorscheme.text))
-        .with_child(Label::new(text).with_text_color(colorscheme.text))
+        .with_child(Label::new("welcome to my program").with_text_color(colorscheme[0].text))
+        .with_child(Label::new(text).with_text_color(colorscheme[0].text))
         .with_child(button)
         .with_child(fuckassdog)
         .with_child(theme_button)
@@ -51,11 +48,6 @@ fn ui_builder() -> impl Widget<u32> {
         .disable_scrollbars()
         .center()
         .padding(5.0)
-        .background(colorscheme.base);
+        .background(colorscheme[0].base);
     Align::centered(layout)
-}
-
-fn test()
-{
-    println!("test");
 }

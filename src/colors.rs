@@ -35,13 +35,13 @@ impl Theme {
         subtle: Color::rgb8(121, 117, 147),
         text: Color::rgb8(87, 82, 121),
     };
-    pub fn getthemes() -> Vec<Theme>
+    pub fn get_themes() -> Vec<Theme>
     {
         return vec![self::Theme::ROSE_PINE, self::Theme::ROSE_PINE_MOON, self::Theme::ROSE_PINE_DAWN]
     }
     pub fn next_theme(&mut self) -> Self
     {
-        let themes = Theme::getthemes();
+        let themes = Theme::get_themes();
         if *self == themes[themes.len() - 1]
         {
             *self = themes[0];
@@ -54,10 +54,21 @@ impl Theme {
         }
         return *self;
     }
-
-
-    fn set_theme(theme: Theme) -> Self
+    pub fn cycle_theme( themes: &mut Vec<Theme>)
     {
-        return theme;
+        themes.push(themes[themes.len()-1]);
+        themes.remove(0);
     }
+    pub fn set_theme(theme: Theme) -> Vec<Theme>
+    {
+        let mut theme_ar = Self::get_themes();
+        loop {
+            if theme_ar[0]==theme
+            {
+                return theme_ar;
+            }
+            Self::cycle_theme(&mut theme_ar);
+        }
+    }
+
 }
